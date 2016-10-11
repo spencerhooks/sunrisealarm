@@ -18,7 +18,7 @@ def on_message(client, userdata, msg):
     payload = str(msg.payload)
     client.publish("home/bedroom/sunrise", payload=payload, retain=True) # publish to state topic to confirm the message was received
 
-# function called to publish a message, used here to confirm the state change message was received and update state tracking topic
+# function called when a message is published, used here to confirm the state change message was received by flashing the light
 def on_publish(client, userdata, msg):
     if (payload == "ON"): # flash the light green to acknowledge the ON message was recieved
         bulb.flash(duration=3, interval=1, wrgb_color='0000FF00')
