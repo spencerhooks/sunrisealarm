@@ -85,9 +85,5 @@ class playbulb(object):
         # print "gatttool -b %s --char-write -a %s -n %s" % (self.address, command, value)
         os.system("gatttool -b %s --char-write -a %s -n %s" % (self.address, command, value))
 
-if __name__ == '__main__':
-
-   print 'run from the command line'
-
 
 # add effects, support for simple color names, dimming, add flash N times
