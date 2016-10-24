@@ -72,7 +72,7 @@ class playbulb(object):
         print (time.strftime("%H:%M, %d/%m/%y  Sunrise complete, now holding."))
         sys.stdout.flush() # flush the output buffer so the output is immediately sent (useful when redirecting)
 
-        time.sleep(sunrise_length/2)
+        time.sleep(sunrise_length)
         self.off()
         print (time.strftime("%H:%M, %d/%m/%y  Completed!"))
         sys.stdout.flush() # flush the output buffer so the output is immediately sent (useful when redirecting)
