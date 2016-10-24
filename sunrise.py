@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import time, sys, schedule
+import time, sys
 import paho.mqtt.client as mqtt
 from pyplaybulb import playbulb
 
@@ -47,7 +47,7 @@ while (connected == False):
     except:
         time.sleep(1)
 
-# if run with argument -now then trigger sunrise immediately, then start schedule
+# if run with argument -now then trigger sunrise immediately
 try:   
     if (sys.argv[1] == "-now"):
         time.sleep(10)

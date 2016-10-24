@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import time, os, pygatt, array
+import time, sys, pygatt, array
 
 class playbulb(object):
 
