@@ -1,8 +1,10 @@
 #!/usr/bin/python
 
-import time, os
+import time, os, pygatt, array
 
 class playbulb(object):
+
+    adapter = pygatt.GATTToolBackend()
 
     _is_on = False
     _current_color = ''
@@ -82,8 +84,14 @@ class playbulb(object):
         return self._current_color
 
     def command(self, command, value):
-        # print "gatttool -b %s --char-write -a %s -n %s" % (self.address, command, value)
-        os.system("gatttool -b %s --char-write -a %s -n %s" % (self.address, command, value))
+        value_data = value.decode("hex")
+        value_array = array.array('B', value_data)
+        try:
+            adapter.start()
+            device = adapter.connect(self.address)
+            device.char_write_handle(command, value_data)
+        finally:
+            adapter.stop()
 
 
 # add effects, support for simple color names, dimming, add flash N times
