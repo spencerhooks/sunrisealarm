@@ -8,6 +8,7 @@ bulb = playbulb('CD:B3:4B:0A:AC:E6')
 
 onoff_state = "initial"
 connected = False
+sunrise_mid = "initial" # global variable for tracking message ID
 
 # function to detect connection to the mqtt broker and subscribe to the correct topics
 def on_connect(client, userdata, msg, rc):
@@ -16,25 +17,31 @@ def on_connect(client, userdata, msg, rc):
 # function called when message received on home/bedroom/sunrise/set topic
 def switch_message(client, userdata, msg):
     global onoff_state
+    global sunrise_mid # set global message ID so we can check which one was published later
     onoff_state = msg.payload
-    client.publish("home/bedroom/sunrise", payload=msg.payload, retain=True) # publish to state topic to confirm the message was received
-    if (msg.payload == "ON"): # flash the light green to acknowledge the ON message was recieved
-        bulb.flash(duration=3, interval=1, wrgb_color='0000FF00')
-        print "Sunrise ON"
-        sys.stdout.flush() # flush the output buffer so the output is immediately sent (useful when redirecting)
-    elif (msg.payload == "OFF"): # flash the light red to acknowldge the OFF message was received
-        bulb.flash(duration=3, interval=1, wrgb_color='00FF0000')
-        print "Sunrise OFF"
-        sys.stdout.flush() # flush the output buffer so the output is immediately sent (useful when redirecting)
+    (result, sunrise_mid) = client.publish("home/bedroom/sunrise", payload=msg.payload, retain=True, qos=1) # publish to state topic to confirm the message was received
 
 def schedule_message(client, userdata, msg):
-    if (onoff_state == "ON" and msg.payload == "GO"):
-        bulb.sunrise(sunrise_length=1800)
-        client.publish("home/bedroom/sunrise/scheduler", payload="STOP", retain=True) # publish to scheuler topic to turn off again
+    if (msg.payload == "GO"): # only run when the message was GO
+        client.publish("home/bedroom/sunrise/scheduler", payload="STOP", retain=True, qos=1) # publish to scheduler topic to turn off again
+        if (onoff_state == "ON"): # if alarm is on run the sunrise
+            bulb.sunrise(sunrise_length=1800)
+
+def on_publish(client, userdata, mid):
+    if (mid == sunrise_mid): # if the message published was confirmation sent to home/bedroom/sunrise
+        if (onoff_state == "ON"): # flash the light green to acknowledge the ON message was recieved
+            bulb.flash(num_flashes=3, flash_length=1, wrgb_color='0000FF00')
+            print "Sunrise ON"
+            sys.stdout.flush() # flush the output buffer so the output is immediately sent (useful when redirecting)
+        elif (onoff_state == "OFF"): # flash the light red to acknowldge the OFF message was received
+            bulb.flash(num_flashes=3, flash_length=1, wrgb_color='00FF0000')
+            print "Sunrise OFF"
+            sys.stdout.flush() # flush the output buffer so the output is immediately sent (useful when redirecting)
 
 
 client = mqtt.Client()
 client.on_connect = on_connect
+client.on_publish = on_publish
 
 client.message_callback_add("home/bedroom/sunrise/set", switch_message)
 client.message_callback_add("home/bedroom/sunrise/scheduler", schedule_message)

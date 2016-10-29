@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import time, os
+import time, os, sys
 import subprocess32 as subprocess
 
 class playbulb(object):
@@ -46,12 +46,10 @@ class playbulb(object):
         self.command(self._solid_color, '00000000')
         self._is_on = False
 
-    def flash(self, duration=3.0, interval=1.0, wrgb_color='FFFFFFFF'):
-        if interval > duration: raise AttributeError("Duration must be longer than interval")
-        num_flashes = int(duration / interval)
+    def flash(self, num_flashes=3.0, flash_length=1.0, wrgb_color='FFFFFFFF'):
         for i in range (0, num_flashes):
-            self.on(on_time=(interval/2.0), wrgb_color=wrgb_color)
-            time.sleep(interval/2.0)
+            self.on(on_time=(flash_length/2.0), wrgb_color=wrgb_color)
+            time.sleep(flash_length/2.0)
 
     def change_color(self, value):
         self.command(self._solid_color, value)
