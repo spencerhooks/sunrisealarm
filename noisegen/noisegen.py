@@ -25,10 +25,9 @@ class Player(object):
         """
         Core method, used to play signal.
         """
-        fade_stop_time = 0
-        if durration == 0: fade_stop_time = None
+        is_null = False if durration == 0 else True  # Make sure the fade stop position is null when durration is 0
         global _player
-        _player = Popen(['play', '-q', '-n', 'synth', str(durration), tone, 'gain', str(gain), 'fade', 'q', str(fadetime), str(fade_stop_time)])
+        _player = Popen(['play', '-q', '-n', 'synth', str(durration), tone, 'gain', str(gain), 'fade', 'q', str(fadetime)] + ['0']*is_null)
 
     def stop(self):
         """
@@ -36,5 +35,3 @@ class Player(object):
         """
         global _player
         _player.terminate()
-
-#need to check durration and only specificy fadeout if durration is != 0; also might need to check that fadetime is shorter than durration
