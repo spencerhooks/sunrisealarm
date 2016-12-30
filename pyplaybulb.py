@@ -82,7 +82,7 @@ class playbulb(object):
 
     def command(self, command, value):
         bashcommand = ["gatttool", "-b", self.address, "--char-write", "-a", command, "-n", value]
-        try: 
+        try:
             subprocess.call(bashcommand, timeout=1)
         except:
             pass
