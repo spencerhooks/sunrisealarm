@@ -12,8 +12,12 @@ import time, sox
 
 p = Player()
 
-p.play()
+p.play(durration=5)
 
 print "playing stuff"
-time.sleep(5)
-p.stop()
+print p.is_playing()
+
+time.sleep(7)
+# p.stop()
+
+print p.is_playing()
