@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from noisegen import Player
+from streamgen import Player
 import time, sox
 
 # p = sox.core
@@ -12,7 +12,7 @@ import time, sox
 
 p = Player()
 
-# p.play(duration=5)
+p.play(duration=5)
 
 print "playing stuff"
 print p.is_playing()
