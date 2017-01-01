@@ -54,7 +54,14 @@ class Player(object):
         Method to stop playback. This is only needed when duration is not given or is set to 0 (infinite).
         """
         global _player
-        _player.terminate()
+
+        try:
+            return _player.terminate()
+        except NameError as e:  # Make things a bit more user friendly and allow stop call even if playback never started
+            if str(e) == "global name '_player' is not defined":
+                return False
+            else:
+                raise NameError(str(e))  # Only catch the known error and raise any others to pass them through
 
     def is_playing(self):
         """
