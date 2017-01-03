@@ -15,10 +15,10 @@ def settings():
     return render_template('settings.html')
 
 @app.route('/play_sound')
-def settings():
+def play_sound():
     p.play()
     return render_template('clock.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
     cache.init_app(app)
