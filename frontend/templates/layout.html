@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Spencer's Alarm</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/pure-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/grids-responsive-min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+
+</head>
+
+<body>
+  <div class="header">
+      <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+          <a class="pure-menu-heading" href="">Spencer's Clock Radio</a>
+
+          <ul class="pure-menu-list">
+              <li class="pure-menu-item pure-menu-selected"><a href="{{ url_for('clock') }}" class="pure-menu-link">Clock</a></li>
+              <li class="pure-menu-item"><a href="{{ url_for('settings') }}" class="pure-menu-link">Settings</a></li>
+          </ul>
+
+      </div>
+  </div>
+  <div class="container">
+    {% block content %}
+    {% endblock %}
+  </div>
+</body>
+
+</html>
