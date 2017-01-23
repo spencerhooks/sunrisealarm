@@ -2,6 +2,7 @@
 
 import time, os, sys
 import subprocess32 as subprocess
+from operator import sub
 
 class playbulb(object):
 
@@ -46,7 +47,27 @@ class playbulb(object):
         self.command(self._solid_color, '00000000')
         self._is_on = False
 
-    def flash(self, num_flashes=3.0, flash_length=1.0, wrgb_color='FFFFFFFF'):
+    def fade_off(self, duration=510):
+        # max duration of 510 seconds, fade is very coarse for short fades
+
+        if duration > 510: duration = 510
+        duration = duration/2
+
+        # Convert color string into list of hex numbers
+        color_list = [int(self._current_color[:2], 16), int(self._current_color[2:4], 16), int(self._current_color[4:6], 16), int(self._current_color[6:8], 16)]
+
+        # Create list of integers to be subtracted each time through the loop, minimum of 1
+        fade_list = [(element/duration) if (element%duration) == 0 else (element/duration)+1 for element in color_list]
+        for i in range(duration):
+            color_list = map(sub, color_list, fade_list)  # Subtract the fade amount from the color
+            color_list = [max(0, element) for element in color_list]  # Make sure no color is negative
+            output_list = [hex(element)[2:].zfill(2) for element in color_list] # Format the list to be 2 hex digits
+            output_string = output_list[0] + output_list[1] + output_list[2] + output_list[3] # create output string
+            print(output_string)
+            self.on(wrgb_color=output_string)
+            time.sleep(1)
+
+    def flash(self, num_flashes=3, flash_length=1, wrgb_color='FFFFFFFF'):
         for i in range (0, num_flashes):
             self.on(on_time=(flash_length/2.0), wrgb_color=wrgb_color)
             time.sleep(flash_length/2.0)
