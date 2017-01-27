@@ -15,6 +15,6 @@ with open('color_curves_xy.json') as infile:
     xy_list = json.load(infile)
 
 for item, value in enumerate(xy_list, start=0):
-    lights["Office"].xy = xy_list[item]
+    lights["Office Hue"].xy = xy_list[item]
     print xy_list[item]
     time.sleep(.2)
